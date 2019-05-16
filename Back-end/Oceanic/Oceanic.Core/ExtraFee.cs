@@ -13,6 +13,6 @@ namespace Oceanic.Core
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int GoodsTypeId { get; set; }
-        public double ExtraPercent { get; set; }
+        public int ExtraPercent { get; set; }
     }
 }

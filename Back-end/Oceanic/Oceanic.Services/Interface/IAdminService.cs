@@ -19,7 +19,8 @@ namespace Oceanic.Services.Interface
         void UpdateCity(City city);
         string GetTypeNameById(int typeId);
         int GetTypeIdByName(string typeName);
-
+        string GetGoodsTYpeNameById(int typeId);
+        int GetIdIdByGoodsTypeName(string typeName);
 
     }
 }

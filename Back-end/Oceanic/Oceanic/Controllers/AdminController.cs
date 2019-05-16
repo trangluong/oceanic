@@ -84,7 +84,7 @@ namespace Oceanic.Controllers
                 maxWeight = x.MaxWeight,
                 price = x.Fee
   
-            }); ;
+            });
         }
 
         [Route("api/priceSettings")]
@@ -105,25 +105,32 @@ namespace Oceanic.Controllers
 
         [Route("api/extraFeeSettings")]
         [HttpGet]
-        public IEnumerable<ExtraFee> LoadExtraFee()
+        public IEnumerable<ExtraFeeViewModel> LoadExtraFee()
         {
-            return _adminService.LoadExtraFeeSettings();
+
+            return _adminService.LoadExtraFeeSettings().Select(x => new ExtraFeeViewModel
+            {
+                id = x.Id,
+                extraFee = x.ExtraPercent,
+                goodsType = _adminService.GetGoodsTYpeNameById(x.GoodsTypeId)
+                
+
+            });
         }
 
         [Route("api/extraFeeSettings")]
         [HttpPut]
-        public void UpdateExtraFee([FromBody]SizeViewModel sizeModel)
+        public void UpdateExtraFee([FromBody]ExtraFeeViewModel extraFeeViewModel)
         {
-            Size size = new Size()
+            ExtraFee extraFee = new ExtraFee()
             {
-                Id = sizeModel.id,
-                Type = sizeModel.type,
-                MaxHeight = sizeModel.maxHeight,
-                MaxBreath = sizeModel.maxBreath,
-                MaxDepth = sizeModel.maxDepth
+                Id = extraFeeViewModel.id,
+                ExtraPercent = extraFeeViewModel.extraFee,
+                GoodsTypeId = _adminService.GetIdIdByGoodsTypeName(extraFeeViewModel.goodsType)
+
             };
 
-            _adminService.UpdateSizeSettings(size);
+            _adminService.UpdateExtraFeeSettings(extraFee);
 
         }
 

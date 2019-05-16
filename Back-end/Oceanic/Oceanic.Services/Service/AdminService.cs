@@ -35,23 +35,23 @@ namespace Oceanic.Services.Service
         }
         public void UpdateCity(City city)
         {
-            throw new NotImplementedException();
+            this._cityRepository.Update(city);
         }
 
 
         public IEnumerable<ExtraFee> LoadExtraFeeSettings()
         {
-            throw new NotImplementedException();
+            return _extraFeeRepository.Query().Select();
         }
 
         public IEnumerable<GoodsType> LoadGoodsTypes()
         {
-            throw new NotImplementedException();
+            return _goodsTypeRepository.Query().Select();
         }
 
         public IEnumerable<Price> LoadPriceSettings()
         {
-            throw new NotImplementedException();
+            return _priceRepository.Query().Select();
         }
 
         public IEnumerable<Size> LoadSizeSettings()
@@ -72,12 +72,12 @@ namespace Oceanic.Services.Service
 
         public void UpdateExtraFeeSettings(ExtraFee extraFee)
         {
-            throw new NotImplementedException();
+            this._extraFeeRepository.Update(extraFee);
         }
 
         public void UpdatePriceSettings(Price price)
         {
-            throw new NotImplementedException();
+            this._priceRepository.Update(price);
         }
 
         public void UpdateSizeSettings(Size size)
@@ -85,6 +85,14 @@ namespace Oceanic.Services.Service
             this._sizeRepository.Update(size);
         }
 
+        public string GetGoodsTYpeNameById(int typeId)
+        {
+            return _goodsTypeRepository.Query(x => x.Id == typeId).Select(x => x.Name).FirstOrDefault();
+        }
 
+        public int GetIdIdByGoodsTypeName(string typeName)
+        {
+            return _goodsTypeRepository.Query(x => x.Name == typeName).Select(x => x.Id).FirstOrDefault();
+        }
     }
 }
