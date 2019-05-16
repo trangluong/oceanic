@@ -121,7 +121,7 @@ namespace Oceanic.Services.Service
             Size size = new Size();
             foreach (var s in sizes)
             {
-                if (model.height <= s.MaxHeight && model.length <= s.MaxDepth && model.width <= s.MaxBreath)
+                if (model.height <= s.MaxHeight && model.length <= s.MaxDepth && model.width <= s.MaxBreadth)
                 {
                     size = s;
                     break;
