@@ -351,9 +351,13 @@ MigrationBackup/
 .idea/
 
 .idea/
+ .vs/Oceanic/v15/Server/sqlite3/storage.ide-wal
 
+ .vs/Oceanic/v15/Server/sqlite3/storage.ide-shm
 
+ .vs/Oceanic/v15/.suo
 
+.vs/Oceanic/DesignTimeBuild/.dtbcache
 
 *.suo
 *.user

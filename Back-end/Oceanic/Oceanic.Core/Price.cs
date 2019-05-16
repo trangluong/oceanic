@@ -14,7 +14,7 @@ namespace Oceanic.Core
         public int Id { get; set; }
         public int SizeId { get; set; }
         public int MaxWeight { get; set; }
-        public decimal Fee { get; set; }
+        public double Fee { get; set; }
 
     }
 }
