@@ -9,7 +9,7 @@ namespace Oceanic
     {
         public int id { get; set; }
         public string sizeType { get; set; }
-        public double price { get; set; }
+        public decimal price { get; set; }
         public int maxWeight { get; set; }
     }
 }

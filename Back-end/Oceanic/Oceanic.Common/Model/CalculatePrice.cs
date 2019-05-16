@@ -9,7 +9,7 @@ namespace Oceanic.Common.Model
 {
     public class CalculatePrice
     {
-        public double  price { get; set; }
+        public decimal  price { get; set; }
         public int status { get; set; }
 
     }
