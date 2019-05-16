@@ -1,4 +1,6 @@
-﻿namespace Oceanic.Common.Model
+﻿using Oceanic.Common.Enum;
+
+namespace Oceanic.Common.Model
 {
     public class RouteSearchModel : RoutesViewModel
     {
@@ -6,7 +8,7 @@
         public string to_city { get; set; }
         public int hours { get; set; }
         public int segment { get; set; }
-        public string transportType { get; set; }
+        public TransportTypeEnum transportType { get; set; }
 
     }
 }

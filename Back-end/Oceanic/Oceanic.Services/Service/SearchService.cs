@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Oceanic.Common.Enum;
 using Oceanic.Common.Model;
 using Oceanic.Core;
 using Oceanic.Infrastructure.Interfaces;
@@ -38,15 +39,15 @@ namespace Oceanic.Services.Service
             return _cityRepository.Query().Select().ToList();
         }
 
-        private BidirectionalGraph<string, TaggedEdge<string, string>> buildGraph(List<RouteSearchModel> routes)
+        private BidirectionalGraph<string, TaggedEdge<string, TransportTypeEnum>> buildGraph(List<RouteSearchModel> routes)
         {
-            var graph = new BidirectionalGraph<string, TaggedEdge<string, string>>();
+            var graph = new BidirectionalGraph<string, TaggedEdge<string, TransportTypeEnum>>();
             
             routes.ForEach(route =>
             {
                 graph.AddVertex(route.from_city);
                 graph.AddVertex(route.to_city);
-                graph.AddEdge(new TaggedEdge<string, string>(route.from_city, route.to_city, route.transportType));
+                graph.AddEdge(new TaggedEdge<string, TransportTypeEnum>(route.from_city, route.to_city, route.transportType));
             });
 
             return graph;
@@ -64,11 +65,11 @@ namespace Oceanic.Services.Service
                     to_city = cityDict[r.ToCityId].Code,
                     hours = r.LongHour,
                     segment = r.Segments,
-                    transportType = "Airplane"
+                    transportType = TransportTypeEnum.AIRPLANE
                 });
             }
 
-            List<RouteSearchModel> ToModels(IEnumerable<RoutesViewModel> ms, string transportType)
+            List<RouteSearchModel> ToModels(IEnumerable<RoutesViewModel> ms, TransportTypeEnum transportType)
             {
                 var res = new List<RouteSearchModel>();
                 foreach (var m in ms)
@@ -85,13 +86,46 @@ namespace Oceanic.Services.Service
                 return res;
             }
             
-            var seaRouteModels = ToModels(_routeService.GetRoutes("Sea"), "Sea");
+            var seaRouteModels = ToModels(_routeService.GetRoutes(TransportTypeEnum.SEA), TransportTypeEnum.SEA);
             
-            var carRouteModels = ToModels(_routeService.GetRoutes("Car"), "Car");
+            var carRouteModels = ToModels(_routeService.GetRoutes(TransportTypeEnum.CAR), TransportTypeEnum.CAR);
             
             var otherRoutes = seaRouteModels.Concat(carRouteModels);
 
             return airplaneRouteModels.Concat(otherRoutes).ToList();
+        }
+
+        private Dictionary<TransportTypeEnum, CalculatePrice> GetAllPrices(RouteSearchRequest sr)
+        {
+            var gtDict = _goodsTypeRepository.Query().Select().ToDictionary(g => g.Id);
+            
+            var cpm = new List<CalculatePriceViewModel>
+            {
+                new CalculatePriceViewModel
+                {
+                    weight = sr.weight,
+                    height = sr.height,
+                    width = sr.breadth,
+                    length = sr.depth,
+                    goods_type = gtDict[sr.goodsTypeId].Code
+                }
+            };
+
+            var res = new Dictionary<TransportTypeEnum, CalculatePrice>();
+            
+            var airplanePrice = _adminService.CalculatePrices(cpm).First();
+            res.Add(TransportTypeEnum.AIRPLANE, airplanePrice);
+
+            var seaPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA).First();
+            res.Add(TransportTypeEnum.SEA, seaPrice);
+
+            res.Add(TransportTypeEnum.CAR, new CalculatePrice
+            {
+                price = 20,
+                status = 1
+            });
+            
+            return res;
         }
 
         public List<RouteSearchViewModel> SearchRoutes(RouteSearchRequest sr)
@@ -103,47 +137,33 @@ namespace Oceanic.Services.Service
 
             var routeDict = routes.ToDictionary(r => (r.from_city, r.to_city, r.transportType));
 
-            var gtDict = _goodsTypeRepository.Query().Select().ToDictionary(g => g.Id);
-
             var graph = buildGraph(routes);
+           
+            var pricesPerSegment = GetAllPrices(sr);
 
-            var cpr = new List<CalculatePriceViewModel>
-            {
-                new CalculatePriceViewModel
-                {
-                    weight = sr.weight,
-                    height = sr.height,
-                    width = sr.breadth,
-                    length = sr.depth,
-                    goods_type = gtDict[sr.goodsTypeId].Code
-                }
-            };
-            var pricePerSegment = _adminService.CalculatePrices(cpr).First();
-
-            double WeightByPrice(TaggedEdge<string, string> edge)
+            double WeightByPrice(TaggedEdge<string, TransportTypeEnum> edge)
             {
                 var key = (edge.Source, edge.Target, edge.Tag);
-                var basePrice = (double) (pricePerSegment.price * routeDict[key].segment);
                 switch (routeDict[key].transportType)
                 {
-                    case "Airplane":
-                        return basePrice;
-                    case "Sea":
-                        return basePrice * (double) sr.weight;
-                    case "Car":
-                        return basePrice;
+                    case TransportTypeEnum.AIRPLANE:
+                        return (double) (pricesPerSegment[TransportTypeEnum.AIRPLANE].price * routeDict[key].segment);
+                    case TransportTypeEnum.SEA:
+                        return (double) (pricesPerSegment[TransportTypeEnum.SEA].price * sr.weight);
+                    case TransportTypeEnum.CAR:
+                        return (double) pricesPerSegment[TransportTypeEnum.SEA].price;
                     default:
-                        return basePrice;
+                        throw new ArgumentException("transport type not supported");
                 }
             }
             
-            double WeightByTime(TaggedEdge<string, string> edge)
+            double WeightByTime(TaggedEdge<string, TransportTypeEnum> edge)
             {
                 var key = (edge.Source, edge.Target, edge.Tag);
                 return routeDict[key].hours;
             }
 
-            IEnumerable<IEnumerable<TaggedEdge<string, string>>> ShortestPaths(Func<TaggedEdge<string, string>, double> weightFunc)
+            IEnumerable<IEnumerable<TaggedEdge<string, TransportTypeEnum>>> ShortestPaths(Func<TaggedEdge<string, TransportTypeEnum>, double> weightFunc)
             {
                 try
                 {
@@ -152,7 +172,7 @@ namespace Oceanic.Services.Service
                 }
                 catch (KeyNotFoundException e)
                 {
-                    return new List<List<TaggedEdge<string, string>>>();
+                    return new List<List<TaggedEdge<string, TransportTypeEnum>>>();
                 }
             }
 
@@ -160,7 +180,20 @@ namespace Oceanic.Services.Service
 
             var result = new List<RouteSearchViewModel>();
 
-            var transportTypeByCode = _transportTypeRepository.Query().Select().ToDictionary(t => t.Code);
+            var transportTypeByCode = _transportTypeRepository.Query().Select().ToDictionary(t =>
+            {
+                switch (t.Code)
+                {
+                    case "Airplane":
+                        return TransportTypeEnum.AIRPLANE;
+                    case "Sea":
+                        return TransportTypeEnum.SEA;
+                    case "Car":
+                        return TransportTypeEnum.CAR;
+                    default:
+                        return TransportTypeEnum.AIRPLANE;
+                }
+            });
 
             var cityByCode = cities.ToDictionary(c => c.Code);
             
