@@ -146,6 +146,7 @@ namespace Oceanic.Services.Service
                 }
 
             }
+
             return  new CalculatePrice()
             {
                 price = price.Fee,

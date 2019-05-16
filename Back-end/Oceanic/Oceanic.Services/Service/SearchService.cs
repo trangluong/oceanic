@@ -11,10 +11,11 @@ namespace Oceanic.Services.Service
     public class SearchService : ISearchService
     {
         private readonly IRepositoryAsync<City> _cityRepository;
-
-        public SearchService(IRepositoryAsync<City> cityRepository) 
+        private readonly IRepositoryAsync<Route> _routeRepository;
+        public SearchService(IRepositoryAsync<City> cityRepository, IRepositoryAsync<Route> routeRepository) 
         {
             this._cityRepository = cityRepository;
+            this._routeRepository = routeRepository;
         }
         public IEnumerable<City> LoadCity()
         {
@@ -22,5 +23,6 @@ namespace Oceanic.Services.Service
         }
 
        
+
     }
 }
