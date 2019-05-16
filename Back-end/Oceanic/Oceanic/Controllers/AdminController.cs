@@ -69,7 +69,7 @@ namespace Oceanic.Controllers
                 Type = sizeViewModel.type,
                 MaxHeight = sizeViewModel.maxHeight,
                 MaxBreath = sizeViewModel.maxBreadth,
-                MaxDepth = sizeViewModel.maxDepth
+                MaxDepth = sizeViewModel.maxDepth,
             };
             _adminService.UpdateSizeSettings(size);    
         }

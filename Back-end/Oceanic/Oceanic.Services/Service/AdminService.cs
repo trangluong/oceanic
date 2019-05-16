@@ -17,10 +17,11 @@ namespace Oceanic.Services.Service
         private readonly IRepositoryAsync<ExtraFee> _extraFeeRepository;
         private readonly IRepositoryAsync<GoodsType> _goodsTypeRepository;
         private readonly IRepositoryAsync<Price> _priceRepository;
+        IUnitOfWorkAsync _unitOfWork;
 
         public AdminService(IRepositoryAsync<City> cityRepository, IRepositoryAsync<Size> sizeRepository,
            IRepositoryAsync<ExtraFee> extraFeeRepository, IRepositoryAsync<GoodsType> goodsTypeRepository, IRepositoryAsync<Price> priceRepository,
-            IRepositoryAsync<Route> routeRepository) 
+            IRepositoryAsync<Route> routeRepository, IUnitOfWorkAsync unitOfWork) 
         {
             this._cityRepository = cityRepository;
             this._sizeRepository = sizeRepository;
@@ -28,6 +29,7 @@ namespace Oceanic.Services.Service
             this._priceRepository = priceRepository;
             this._extraFeeRepository = extraFeeRepository;
             this._routeRepository = routeRepository;
+            this._unitOfWork = unitOfWork;
         }
         public void AddCity(City city)
         {
@@ -41,6 +43,7 @@ namespace Oceanic.Services.Service
         public void UpdateCity(City city)
         {
             this._cityRepository.Update(city);
+            this._unitOfWork.SaveChanges();
         }
 
 
@@ -78,16 +81,19 @@ namespace Oceanic.Services.Service
         public void UpdateExtraFeeSettings(ExtraFee extraFee)
         {
             this._extraFeeRepository.Update(extraFee);
+            this._unitOfWork.SaveChanges();
         }
 
         public void UpdatePriceSettings(Price price)
         {
             this._priceRepository.Update(price);
+            this._unitOfWork.SaveChanges();
         }
 
         public void UpdateSizeSettings(Size size)
         {
             this._sizeRepository.Update(size);
+            _unitOfWork.SaveChanges();
         }
 
         public string GetGoodsTYpeNameById(int typeId)
