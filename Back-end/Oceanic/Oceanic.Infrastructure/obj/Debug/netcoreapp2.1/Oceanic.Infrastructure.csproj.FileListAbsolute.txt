@@ -1,0 +1,15 @@
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Infrastructure.dll.config
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Infrastructure.deps.json
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Infrastructure.dll
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Infrastructure.pdb
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Common.dll
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Core.dll
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Common.pdb
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\bin\Debug\netcoreapp2.1\Oceanic.Core.pdb
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\obj\Debug\netcoreapp2.1\Oceanic.Infrastructure.csprojAssemblyReference.cache
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\obj\Debug\netcoreapp2.1\Oceanic.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\obj\Debug\netcoreapp2.1\Oceanic.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\obj\Debug\netcoreapp2.1\Oceanic.Infrastructure.AssemblyInfo.cs
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\obj\Debug\netcoreapp2.1\Oceanic.Infrastructure.csproj.CopyComplete
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\obj\Debug\netcoreapp2.1\Oceanic.Infrastructure.dll
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Infrastructure\obj\Debug\netcoreapp2.1\Oceanic.Infrastructure.pdb

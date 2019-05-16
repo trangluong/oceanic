@@ -1,0 +1,9 @@
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\bin\Debug\netcoreapp2.1\Oceanic.Test.deps.json
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\bin\Debug\netcoreapp2.1\Oceanic.Test.dll
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\bin\Debug\netcoreapp2.1\Oceanic.Test.pdb
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\obj\Debug\netcoreapp2.1\Oceanic.Test.csprojAssemblyReference.cache
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\obj\Debug\netcoreapp2.1\Oceanic.Test.csproj.CoreCompileInputs.cache
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\obj\Debug\netcoreapp2.1\Oceanic.Test.AssemblyInfoInputs.cache
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\obj\Debug\netcoreapp2.1\Oceanic.Test.AssemblyInfo.cs
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\obj\Debug\netcoreapp2.1\Oceanic.Test.dll
+C:\Users\trangln\Desktop\CES\Oceanic\Oceanic.Test\obj\Debug\netcoreapp2.1\Oceanic.Test.pdb

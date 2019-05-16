@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Oceanic.Common\Oceanic.Common.csproj" />
+    <ProjectReference Include="..\Oceanic.Core\Oceanic.Core.csproj" />
+    <ProjectReference Include="..\Oceanic.Infrastructure\Oceanic.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
