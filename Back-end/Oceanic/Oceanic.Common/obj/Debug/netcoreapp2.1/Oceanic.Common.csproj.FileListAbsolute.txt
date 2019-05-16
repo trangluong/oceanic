@@ -16,3 +16,12 @@ D:\Practice\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Ocea
 D:\Practice\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.AssemblyInfo.cs
 D:\Practice\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.dll
 D:\Practice\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.pdb
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\bin\Debug\netcoreapp2.1\Oceanic.Common.deps.json
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\bin\Debug\netcoreapp2.1\Oceanic.Common.dll
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\bin\Debug\netcoreapp2.1\Oceanic.Common.pdb
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.csprojAssemblyReference.cache
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.csproj.CoreCompileInputs.cache
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.AssemblyInfoInputs.cache
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.AssemblyInfo.cs
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.dll
+C:\Users\pdtk\Source\Repos\oceanic\Back-end\Oceanic\Oceanic.Common\obj\Debug\netcoreapp2.1\Oceanic.Common.pdb
