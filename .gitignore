@@ -42,6 +42,8 @@ Generated\ Files/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+Back-end/Oceanic/.vs
+
 # NUnit
 *.VisualState.xml
 TestResult.xml
@@ -365,3 +367,6 @@ _ReSharper.*
 bin
 obj
 packages
+.vs
+
+/.vs
