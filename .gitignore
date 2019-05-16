@@ -349,3 +349,15 @@ healthchecksdb
 MigrationBackup/
 
 .idea/
+
+.idea/
+
+
+
+
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
