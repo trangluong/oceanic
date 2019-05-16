@@ -17,42 +17,91 @@ namespace Oceanic.Services.Service
         private readonly IRepositoryAsync<TransportType> _transportTypeRepository;
         private readonly IRepositoryAsync<GoodsType> _goodsTypeRepository;
         private readonly IAdminService _adminService;
+        private readonly IRouteService _routeService;
 
         public SearchService(IRepositoryAsync<City> cityRepository, 
             IRepositoryAsync<Route> routeRepository,
             IRepositoryAsync<TransportType> transportTypeRepository,
             IAdminService adminService,
-            IRepositoryAsync<GoodsType> goodsTypeRepository) 
+            IRepositoryAsync<GoodsType> goodsTypeRepository,
+            IRouteService routeService) 
         {
             this._cityRepository = cityRepository;
             this._routeRepository = routeRepository;
             this._transportTypeRepository = transportTypeRepository;
             this._adminService = adminService;
             this._goodsTypeRepository = goodsTypeRepository;
+            this._routeService = routeService;
         }
         public IEnumerable<City> LoadCity()
         {
             return _cityRepository.Query().Select().ToList();
         }
 
-        private BidirectionalGraph<int, Edge<int>> buildGraph(List<Route> routes)
+        private BidirectionalGraph<string, TaggedEdge<string, string>> buildGraph(List<RouteSearchModel> routes)
         {
-            BidirectionalGraph<int, Edge<int>> graph = new BidirectionalGraph<int, Edge<int>>();
+            var graph = new BidirectionalGraph<string, TaggedEdge<string, string>>();
             
             routes.ForEach(route =>
             {
-                graph.AddVertex(route.FromCityId);
-                graph.AddVertex(route.ToCityId);
-                graph.AddEdge(new Edge<int>(route.FromCityId, route.ToCityId));
+                graph.AddVertex(route.from_city);
+                graph.AddVertex(route.to_city);
+                graph.AddEdge(new TaggedEdge<string, string>(route.from_city, route.to_city, route.transportType));
             });
 
             return graph;
         }
-        
+
+        private List<RouteSearchModel> GetAllRoutes(Dictionary<int, City> cityDict)
+        {
+            var airplaneRoutes = _routeRepository.Query(r => r.IsActive).Select().ToList();
+            var airplaneRouteModels = new List<RouteSearchModel>();
+            foreach (var r in airplaneRoutes)
+            {
+                airplaneRouteModels.Add(new RouteSearchModel
+                {
+                    from_city = cityDict[r.FromCityId].Code,
+                    to_city = cityDict[r.ToCityId].Code,
+                    hours = r.LongHour,
+                    segment = r.Segments,
+                    transportType = "Airplane"
+                });
+            }
+
+            List<RouteSearchModel> ToModels(IEnumerable<RoutesViewModel> ms, string transportType)
+            {
+                var res = new List<RouteSearchModel>();
+                foreach (var m in ms)
+                {
+                    res.Add(new RouteSearchModel
+                    {
+                        from_city = m.from_city,
+                        to_city = m.to_city,
+                        hours = m.hours,
+                        segment = m.segment,
+                        transportType = transportType
+                    });
+                }
+                return res;
+            }
+            
+            var seaRouteModels = ToModels(_routeService.GetRoutes("Sea"), "Sea");
+            
+            var carRouteModels = ToModels(_routeService.GetRoutes("Car"), "Car");
+            
+            var otherRoutes = seaRouteModels.Concat(carRouteModels);
+
+            return airplaneRouteModels.Concat(otherRoutes).ToList();
+        }
+
         public List<RouteSearchViewModel> SearchRoutes(RouteSearchRequest sr)
         {
-            var routes = _routeRepository.Query(r => r.IsActive).Select().ToList();
-            var routeDict = routes.ToDictionary(r => (r.FromCityId, r.ToCityId));
+            var cities = _cityRepository.Query().Select().ToList();
+            var cityById = cities.ToDictionary(c => c.Id);
+            
+            var routes = GetAllRoutes(cityById);
+
+            var routeDict = routes.ToDictionary(r => (r.from_city, r.to_city, r.transportType));
 
             var gtDict = _goodsTypeRepository.Query().Select().ToDictionary(g => g.Id);
 
@@ -71,26 +120,39 @@ namespace Oceanic.Services.Service
             };
             var pricePerSegment = _adminService.CalculatePrices(cpr).First();
 
-            double WeightByPrice(Edge<int> edge)
+            double WeightByPrice(TaggedEdge<string, string> edge)
             {
-                return (double) (pricePerSegment.price * routeDict[(edge.Source, edge.Target)].Segments);
+                var key = (edge.Source, edge.Target, edge.Tag);
+                var basePrice = (double) (pricePerSegment.price * routeDict[key].segment);
+                switch (routeDict[key].transportType)
+                {
+                    case "Airplane":
+                        return basePrice;
+                    case "Sea":
+                        return basePrice * (double) sr.weight;
+                    case "Car":
+                        return basePrice;
+                    default:
+                        return basePrice;
+                }
             }
             
-            double WeightByTime(Edge<int> edge)
+            double WeightByTime(TaggedEdge<string, string> edge)
             {
-                return routeDict[(edge.Source, edge.Target)].LongHour;
+                var key = (edge.Source, edge.Target, edge.Tag);
+                return routeDict[key].hours;
             }
 
-            IEnumerable<IEnumerable<Edge<int>>> ShortestPaths(Func<Edge<int>, double> weightFunc)
+            IEnumerable<IEnumerable<TaggedEdge<string, string>>> ShortestPaths(Func<TaggedEdge<string, string>, double> weightFunc)
             {
                 try
                 {
                     return graph.RankedShortestPathHoffmanPavley(
-                        weightFunc, sr.fromCityId, sr.toCityId, 2);
+                        weightFunc, cityById[sr.fromCityId].Code, cityById[sr.toCityId].Code, 2);
                 }
                 catch (KeyNotFoundException e)
                 {
-                    return new List<List<Edge<int>>>();
+                    return new List<List<TaggedEdge<string, string>>>();
                 }
             }
 
@@ -98,8 +160,9 @@ namespace Oceanic.Services.Service
 
             var result = new List<RouteSearchViewModel>();
 
-            var cityDict = _cityRepository.Query().Select().ToDictionary(c => c.Id);
-            var transportTypeDict = _transportTypeRepository.Query().Select().ToDictionary(t => t.Id);
+            var transportTypeByCode = _transportTypeRepository.Query().Select().ToDictionary(t => t.Code);
+
+            var cityByCode = cities.ToDictionary(c => c.Code);
             
             foreach (var shortestPath in shortestPaths)
             {
@@ -110,11 +173,12 @@ namespace Oceanic.Services.Service
                 
                 foreach (var edge in shortestPath)
                 {
+                    var key = (edge.Source, edge.Target, edge.Tag);
                     parts.Add(new RouteViewModel
                     {
-                        fromCity = cityDict[edge.Source].Name,
-                        toCity = cityDict[edge.Target].Name,
-                        transportType = transportTypeDict[routeDict[(edge.Source, edge.Target)].TransportType].Name
+                        fromCity = cityByCode[edge.Source].Name,
+                        toCity = cityByCode[edge.Target].Name,
+                        transportType = transportTypeByCode[routeDict[key].transportType].Name
                     });
 
                     estimatedTime += Convert.ToInt32(WeightByTime(edge));
