@@ -16,7 +16,7 @@ namespace Oceanic.Infrastructure.Mapping
             builder.Property(t => t.Type).HasColumnName("TYPE");
             builder.Property(t => t.MaxHeight).HasColumnName("MAXHEIGHT");
             builder.Property(t => t.MaxDepth).HasColumnName("MAXDEPTH");
-            builder.Property(t => t.MaxBreath).HasColumnName("MAXBREADTH");
+            builder.Property(t => t.MaxBreadth).HasColumnName("MAXBREADTH");
         }
     }
 }

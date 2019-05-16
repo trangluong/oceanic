@@ -15,6 +15,6 @@ namespace Oceanic.Core
         public string Type { get; set; }
         public int MaxHeight { get; set; }
         public int MaxDepth { get; set; }
-        public int MaxBreath { get; set; }
+        public int MaxBreadth { get; set; }
     }
 }

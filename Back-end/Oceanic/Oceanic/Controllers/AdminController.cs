@@ -54,8 +54,8 @@ namespace Oceanic.Controllers
                 id = x.Id,
                 type = x.Type,
                 maxHeight = x.MaxHeight,
-                maxBreadth = x.MaxBreath,
-                maxDepth = x.MaxBreath
+                maxBreadth = x.MaxBreadth,
+                maxDepth = x.MaxDepth
             });
         }
 
@@ -68,7 +68,7 @@ namespace Oceanic.Controllers
                 Id = sizeViewModel.id,
                 Type = sizeViewModel.type,
                 MaxHeight = sizeViewModel.maxHeight,
-                MaxBreath = sizeViewModel.maxBreadth,
+                MaxBreadth = sizeViewModel.maxBreadth,
                 MaxDepth = sizeViewModel.maxDepth,
             };
             _adminService.UpdateSizeSettings(size);    
