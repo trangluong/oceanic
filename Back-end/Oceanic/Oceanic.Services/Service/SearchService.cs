@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Oceanic.Common.Model;
 using Oceanic.Core;
 using Oceanic.Infrastructure.Interfaces;
@@ -16,14 +14,20 @@ namespace Oceanic.Services.Service
         private readonly IRepositoryAsync<City> _cityRepository;
         private readonly IRepositoryAsync<Route> _routeRepository;
         private readonly IRepositoryAsync<TransportType> _transportTypeRepository;
+        private readonly IRepositoryAsync<GoodsType> _goodsTypeRepository;
+        private readonly IAdminService _adminService;
 
         public SearchService(IRepositoryAsync<City> cityRepository, 
             IRepositoryAsync<Route> routeRepository,
-            IRepositoryAsync<TransportType> transportTypeRepository) 
+            IRepositoryAsync<TransportType> transportTypeRepository,
+            IAdminService adminService,
+            IRepositoryAsync<GoodsType> goodsTypeRepository) 
         {
             this._cityRepository = cityRepository;
             this._routeRepository = routeRepository;
             this._transportTypeRepository = transportTypeRepository;
+            this._adminService = adminService;
+            this._goodsTypeRepository = goodsTypeRepository;
         }
         public IEnumerable<City> LoadCity()
         {
@@ -46,28 +50,53 @@ namespace Oceanic.Services.Service
 
         public List<RouteSearchViewModel> SearchRoutes(RouteSearchRequest sr)
         {
-            var routes = _routeRepository.Query().Select().ToList();
+            var routes = _routeRepository.Query(r => r.IsActive).Select().ToList();
+            var routeDict = routes.ToDictionary(r => (r.FromCityId, r.ToCityId));
+
+            var gtDict = _goodsTypeRepository.Query().Select().ToDictionary(g => g.Id);
 
             var graph = buildGraph(routes);
 
-            double EdgeWeights(Edge<int> edge) => 1.0;
+            var cpr = new List<CalculatePriceViewModel>
+            {
+                new CalculatePriceViewModel
+                {
+                    weight = sr.weight,
+                    height = sr.height,
+                    width = sr.breadth,
+                    length = sr.depth,
+                    goods_type = gtDict[sr.goodsTypeId].Code
+                }
+            };
+            var pricePerSegment = _adminService.CalculatePrices(cpr).First();
 
-            var shortestPaths = graph.RankedShortestPathHoffmanPavley(
-                EdgeWeights, sr.fromCityId, sr.toCityId, 2);
+            double EdgeWeights(Edge<int> edge)
+            {
+                return (double) (pricePerSegment.price * routeDict[(edge.Source, edge.Target)].Segments);
+            }
+
+            IEnumerable<IEnumerable<Edge<int>>> shortestPaths;
+            try
+            {
+                shortestPaths = graph.RankedShortestPathHoffmanPavley(
+                    EdgeWeights, sr.fromCityId, sr.toCityId, 2);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return new List<RouteSearchViewModel>();
+            }
 
             var result = new List<RouteSearchViewModel>();
 
             var cityDict = _cityRepository.Query().Select().ToDictionary(c => c.Id);
             var transportTypeDict = _transportTypeRepository.Query().Select().ToDictionary(t => t.Id);
-
-            var routeLookup = routes.ToDictionary(r => (r.FromCityId, r.ToCityId));
             
             foreach (var shortestPath in shortestPaths)
             {
                 var routeModel = new RouteSearchViewModel();
                 var parts = new List<RouteViewModel>();
                 var estimatedTime = 0;
-                var price = 0;
+                var price = 0.0;
                 
                 foreach (var edge in shortestPath)
                 {
@@ -75,11 +104,11 @@ namespace Oceanic.Services.Service
                     {
                         fromCity = cityDict[edge.Source].Name,
                         toCity = cityDict[edge.Target].Name,
-                        transportType = transportTypeDict[routeLookup[(edge.Source, edge.Target)].TransportType].Name
+                        transportType = transportTypeDict[routeDict[(edge.Source, edge.Target)].TransportType].Name
                     });
 
-                    estimatedTime += routeLookup[(edge.Source, edge.Target)].LongHour;
-                    price += 1;
+                    estimatedTime += routeDict[(edge.Source, edge.Target)].LongHour;
+                    price += EdgeWeights(edge);
                 }
 
                 routeModel.parts = parts;
