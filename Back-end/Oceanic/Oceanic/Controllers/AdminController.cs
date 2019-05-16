@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Oceanic.Common.Model;
+using Oceanic.Common.Task;
 using Oceanic.Core;
 using Oceanic.Services.Interface;
 
@@ -177,6 +179,48 @@ namespace Oceanic.Controllers
                 }
             }
             return result;
+        }
+
+        [Route("api/external/routes/{transportType}")]
+        [HttpGet]
+
+        public IEnumerable<RoutesViewModel> ExportRoutes(string transportType)
+        {
+            HttpWebRequestHandler task = new HttpWebRequestHandler();
+             
+            if(transportType == "sea")
+            {
+               return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes");
+            }
+
+            if (transportType == "car")
+            {
+                return task.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes");
+            }
+            return null;
+        }
+
+        [Route("api/external/calculatePrices/{transportType}")]
+        [HttpPost]
+
+        public IList<CalculatePrice> CalculatePriceExternal([FromBody] IList<CalculatePriceViewModel> calculatePriceViewModel, string transportType)
+        {
+
+            HttpWebRequestHandler task = new HttpWebRequestHandler();
+
+            if (transportType == "sea")
+            {
+                return   task.PostMethod("https://wa-eitvn.azurewebsites.net/index.php?r=api/price", calculatePriceViewModel);
+            }
+
+            if (transportType == "car")
+            {
+                return  task.PostMethod("https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", calculatePriceViewModel);
+
+            }
+            return null;
+
+           
         }
 
     }
