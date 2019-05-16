@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Oceanic.Common.Model;
 using Oceanic.Services.Interface;
 
 namespace Oceanic.Controllers
@@ -17,6 +14,13 @@ namespace Oceanic.Controllers
         public SearchController(ISearchService searchRoutesService)
         {
             _searchRoutesService = searchRoutesService;
+        }
+
+        [Route("api/routes/search")]
+        [HttpPost]
+        public List<RouteSearchViewModel> SearchRoutes([FromBody] RouteSearchRequest searchRequest)
+        {
+            return _searchRoutesService.SearchRoutes(searchRequest);
         }
 
     }

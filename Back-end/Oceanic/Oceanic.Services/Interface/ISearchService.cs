@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Oceanic.Common.Model;
 using Oceanic.Core;
 
 namespace Oceanic.Services.Interface
@@ -9,5 +8,6 @@ namespace Oceanic.Services.Interface
     {
         IEnumerable<City> LoadCity();
 
+        List<RouteSearchViewModel> SearchRoutes(RouteSearchRequest sr);
     }
 }
