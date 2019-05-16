@@ -82,7 +82,7 @@ namespace Oceanic.Controllers
             return _adminService.LoadPriceSettings().Select(x => new PriceViewModel
             {
                 id = x.Id,
-                sizeType = _adminService.GetTypeNameById(x.Id),
+                sizeType = _adminService.GetTypeNameById(x.SizeId),
                 maxWeight = x.MaxWeight,
                 price = x.Fee
   
