@@ -91,17 +91,19 @@ namespace Oceanic.Controllers
 
         [Route("api/priceSettings")]
         [HttpPut]
-        public void UpdatePrice([FromBody] PriceViewModel priceViewModel)
+        public void UpdatePrice([FromBody] IList<PriceViewModel> priceViewModel)
         {
-            Price price = new Price()
+            foreach (var m in priceViewModel)
             {
-                Id = priceViewModel.id,
-                SizeId = _adminService.GetTypeIdByName(priceViewModel.sizeType),
-                MaxWeight = priceViewModel.maxWeight,
-              
-            };
-            _adminService.UpdatePriceSettings(price);
-
+                Price price = new Price()
+                {
+                    Id = m.id,
+                    SizeId = _adminService.GetTypeIdByName(m.sizeType),
+                    MaxWeight = m.maxWeight,
+                    Fee = m.price
+                };
+                _adminService.UpdatePriceSettings(price);
+            }
         }
 
 
