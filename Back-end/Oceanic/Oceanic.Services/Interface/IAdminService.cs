@@ -23,7 +23,7 @@ namespace Oceanic.Services.Interface
         int GetTypeIdByName(string typeName);
         string GetGoodsTYpeNameById(int typeId);
         int GetIdIdByGoodsTypeName(string typeName);
-        string GetCityNameById(int cityId);
+        string GetCityCodeByID(int cityId);
         IList<CalculatePrice> CalculatePrices(IList<CalculatePriceViewModel> calculatePriceViewModel);
        
 

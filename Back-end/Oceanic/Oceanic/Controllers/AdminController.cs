@@ -144,8 +144,8 @@ namespace Oceanic.Controllers
         {
             return _adminService.LoadRoutes().Select(x => new RoutesViewModel
             {
-                from_city = _adminService.GetCityNameById(x.FromCityId),
-                to_city = _adminService.GetCityNameById(x.ToCityId),
+                from_city = _adminService.GetCityCodeByID(x.FromCityId),
+                to_city = _adminService.GetCityCodeByID(x.ToCityId),
                 hours = x.LongHour,
                 segment = x.Segments
 

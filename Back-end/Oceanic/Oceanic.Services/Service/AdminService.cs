@@ -111,9 +111,9 @@ namespace Oceanic.Services.Service
             return _routeRepository.Query().Select();
         }
 
-        public string GetCityNameById(int cityId)
+        public string GetCityCodeByID(int cityId)
         {
-            return _cityRepository.Query(x => x.Id == cityId).Select(x => x.Name).FirstOrDefault();
+            return _cityRepository.Query(x => x.Id == cityId).Select(x => x.Code).FirstOrDefault();
         }
 
         private CalculatePrice CalulatePriceForASegment(CalculatePriceViewModel model, IList<Size> sizes, IList<GoodsType> goodsTypes, IList<Price> prices)
@@ -146,10 +146,12 @@ namespace Oceanic.Services.Service
                 }
 
             }
-
+            int goodsTypeId = _goodsTypeRepository.Query(x => x.Code == model.goods_type).Select(x => x.Id).FirstOrDefault();
+            int extraPercent= _extraFeeRepository.Query(x => x.GoodsTypeId == goodsTypeId).Select(x => x.ExtraPercent).FirstOrDefault();
+            decimal extraFee  = (extraPercent / 100) * price.Fee;
             return  new CalculatePrice()
             {
-                price = price.Fee,
+                price = price.Fee + extraFee,
                 status = 1
             };
 
