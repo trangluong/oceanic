@@ -51,7 +51,7 @@ namespace Oceanic
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000")
+                        builder.WithOrigins("http://localhost:3000", "https://wa-oavnfe.azurewebsites.net")
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });
