@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Oceanic.Common;
 using Oceanic.Common.Model;
-using Oceanic.Common.Task;
 using Oceanic.Core;
 using Oceanic.Services.Interface;
 
@@ -205,12 +205,14 @@ namespace Oceanic.Controllers
 
             if (transportType == "sea")
             {
-                return   task.PostMethod("https://wa-eitvn.azurewebsites.net/index.php?r=api/price", calculatePriceViewModel);
+                return task.PostMethod("https://wa-eitvn.azurewebsites.net/index.php?r=api/price", 
+                    calculatePriceViewModel).Result;
             }
 
             if (transportType == "car")
             {
-                return  task.PostMethod("https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", calculatePriceViewModel);
+                return task.PostMethod("https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", 
+                    calculatePriceViewModel).Result;
 
             }
             return null;

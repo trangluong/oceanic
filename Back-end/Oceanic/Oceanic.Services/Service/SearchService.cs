@@ -103,7 +103,7 @@ namespace Oceanic.Services.Service
             {
                 new CalculatePriceViewModel
                 {
-                    weight = sr.weight,
+                    weight = Convert.ToInt32(sr.weight),
                     height = sr.height,
                     width = sr.breadth,
                     length = sr.depth,
@@ -116,14 +116,15 @@ namespace Oceanic.Services.Service
             var airplanePrice = _adminService.CalculatePrices(cpm).First();
             res.Add(TransportTypeEnum.AIRPLANE, airplanePrice);
 
-            var seaPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA).First();
-            res.Add(TransportTypeEnum.SEA, seaPrice);
-
-            res.Add(TransportTypeEnum.CAR, new CalculatePrice
+//            var seaPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA).First();
+            res.Add(TransportTypeEnum.SEA, new CalculatePrice
             {
                 price = 20,
                 status = 1
             });
+
+            var carPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.CAR).First();
+            res.Add(TransportTypeEnum.CAR, carPrice);
             
             return res;
         }

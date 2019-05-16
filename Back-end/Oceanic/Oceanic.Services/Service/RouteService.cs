@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Oceanic.Common;
 using Oceanic.Common.Enum;
 using Oceanic.Common.Model;
-using Oceanic.Common.Task;
 using Oceanic.Services.Interface;
 
 namespace Oceanic.Services.Service
@@ -18,7 +18,8 @@ namespace Oceanic.Services.Service
              
             if (transportType == TransportTypeEnum.SEA)
             {
-                return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes");
+                return new List<RoutesViewModel>();
+//                return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes");
             }
 
             if (transportType == TransportTypeEnum.CAR)
@@ -37,13 +38,13 @@ namespace Oceanic.Services.Service
             if (transportType == TransportTypeEnum.SEA)
             {
                 return task.PostMethod("https://wa-eitvn.azurewebsites.net/index.php?r=api/price", 
-                    calculatePriceViewModel);
+                    calculatePriceViewModel).Result;
             }
 
             if (transportType == TransportTypeEnum.CAR)
             {
                 return task.PostMethod("https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", 
-                    calculatePriceViewModel);
+                    calculatePriceViewModel).Result;
             }
             
             throw new ArgumentException("transport type not supported");
