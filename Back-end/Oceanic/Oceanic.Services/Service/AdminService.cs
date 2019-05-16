@@ -43,7 +43,7 @@ namespace Oceanic.Services.Service
         public void UpdateCity(City city)
         {
             this._cityRepository.Update(city);
-            this._unitOfWork.SaveChanges();
+              this._unitOfWork.SaveChanges();
         }
 
 

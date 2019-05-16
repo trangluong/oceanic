@@ -15,8 +15,8 @@ namespace Oceanic.Infrastructure.Mapping
             builder.ToTable("ROUTE");
             builder.Property(t => t.FromCityId).HasColumnName("FROMCITYID");
             builder.Property(t => t.ToCityId).HasColumnName("TOCITYID");
-            builder.Property(t => t.TransportType).HasColumnName("TRANSPORTTYPE");
-            builder.Property(t => t.LongHour).HasColumnName("MAXBREATH");
+            builder.Property(t => t.TransportType).HasColumnName("TRANSPORTTYPEID");
+            builder.Property(t => t.LongHour).HasColumnName("HOURS");
             builder.Property(t => t.Segments).HasColumnName("SEGMENTS");
             builder.Property(t => t.IsActive).HasColumnName("ISACTIVE");
         }

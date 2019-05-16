@@ -137,7 +137,7 @@ namespace Oceanic.Controllers
         }
 
         [Route("api/exportedRoutes")]
-        [HttpPut]
+        [HttpGet]
         public IEnumerable<RoutesViewModel> ExportRoutes()
         {
             return _adminService.LoadRoutes().Select(x => new RoutesViewModel
@@ -169,11 +169,12 @@ namespace Oceanic.Controllers
                     };
                     result.Add(response);
                 }
+                else
+                {
+                   result = _adminService.CalculatePrices(calculatePriceViewModel);
+                }
             }
             return result;
-            
-            
-
         }
 
     }
