@@ -5,9 +5,9 @@ using Oceanic.Core;
 
 namespace Oceanic.Services.Interface
 {
-    public interface ISearchService 
+    public interface ISizeService : IBaseService<Size>
     {
-        IEnumerable<City> LoadCity();
+        IEnumerable<Size> LoadSize();
 
     }
 }

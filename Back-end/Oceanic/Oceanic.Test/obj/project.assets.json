@@ -2923,11 +2923,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Test\\Oceanic.Test.csproj",
+      "projectUniqueName": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Test\\Oceanic.Test.csproj",
       "projectName": "Oceanic.Test",
-      "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Test\\Oceanic.Test.csproj",
+      "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Test\\Oceanic.Test.csproj",
       "packagesPath": "C:\\Users\\trangln\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Test\\obj\\",
+      "outputPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Test\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

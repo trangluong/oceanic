@@ -15,8 +15,6 @@ namespace Oceanic.Infrastructure.Mapping
             builder.ToTable("GOODSTYPE");
             builder.Property(t => t.Code).HasColumnName("CODE");
             builder.Property(t => t.Name).HasColumnName("NAME");
-            builder.Property(t => t.CreatedDate).HasColumnName("CREATEDATE").ValueGeneratedOnAdd();
-            builder.Property(t => t.CreatedBy).HasColumnName("CREATEBY");
         }
     }
 }

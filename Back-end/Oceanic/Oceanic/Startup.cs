@@ -32,7 +32,7 @@ namespace Oceanic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<OceanicDataContext>(options => options.UseSqlServer(@"Data Source=PF0Y3EMA\SQLEXPRESS;Initial Catalog=OCEANIC;User ID=sa;Password=P@ssword1;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+            services.AddDbContext<OceanicDataContext>(options => options.UseSqlServer(@"Data Source=dbs-oavn.database.windows.net;Initial Catalog=OCEANIC;User ID=admin-oavn;Password=oceanicFlyAway16"));
             services.AddScoped<IRepositoryAsync<City>, Repository<City>>()
                 .AddScoped<IUnitOfWorkAsync, UnitOfWork>()
                 .AddScoped<IRepositoryAsync<GoodsType>, Repository<GoodsType>>()

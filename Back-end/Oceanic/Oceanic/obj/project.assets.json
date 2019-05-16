@@ -12853,11 +12853,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic\\Oceanic.csproj",
+      "projectUniqueName": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic\\Oceanic.csproj",
       "projectName": "Oceanic",
-      "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic\\Oceanic.csproj",
+      "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic\\Oceanic.csproj",
       "packagesPath": "C:\\Users\\trangln\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic\\obj\\",
+      "outputPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12876,11 +12876,11 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj": {
-              "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj"
+            "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj": {
+              "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj"
             },
-            "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj": {
-              "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj"
+            "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj": {
+              "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj"
             }
           }
         }

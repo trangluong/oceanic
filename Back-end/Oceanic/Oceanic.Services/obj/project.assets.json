@@ -3065,11 +3065,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj",
+      "projectUniqueName": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj",
       "projectName": "Oceanic.Services",
-      "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj",
+      "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Services\\Oceanic.Services.csproj",
       "packagesPath": "C:\\Users\\trangln\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Services\\obj\\",
+      "outputPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -3088,14 +3088,14 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Common\\Oceanic.Common.csproj": {
-              "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Common\\Oceanic.Common.csproj"
+            "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Common\\Oceanic.Common.csproj": {
+              "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Common\\Oceanic.Common.csproj"
             },
-            "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj": {
-              "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj"
+            "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj": {
+              "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Core\\Oceanic.Core.csproj"
             },
-            "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Infrastructure\\Oceanic.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\trangln\\Desktop\\CES\\Oceanic\\Oceanic.Infrastructure\\Oceanic.Infrastructure.csproj"
+            "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Infrastructure\\Oceanic.Infrastructure.csproj": {
+              "projectPath": "D:\\Practice\\oceanic\\Back-end\\Oceanic\\Oceanic.Infrastructure\\Oceanic.Infrastructure.csproj"
             }
           }
         }

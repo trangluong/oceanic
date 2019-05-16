@@ -4,7 +4,7 @@ using Oceanic.Core;
 
 namespace Oceanic.Infrastructure.Mapping
 {
-    public class OrderDeliveryMap : IEntityTypeConfiguration<Order>
+    public class OrderMap : IEntityTypeConfiguration<Order>
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
@@ -20,8 +20,6 @@ namespace Oceanic.Infrastructure.Mapping
             builder.Property(t => t.ArrivalDate).HasColumnName("ARIVALDATE");
             builder.Property(t => t.TotalFee).HasColumnName("TOTALFEE");
             builder.Property(t => t.RouteIDs).HasColumnName("ROUTEIDS");
-            builder.Property(t => t.CreatedDate).HasColumnName("CREATEDATE").ValueGeneratedOnAdd();
-            builder.Property(t => t.CreatedBy).HasColumnName("CREATEBY");
         }
     }
 }

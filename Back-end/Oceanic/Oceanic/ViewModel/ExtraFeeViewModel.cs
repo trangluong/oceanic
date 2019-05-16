@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Oceanic
 {
-    public class GoodsTypeModel
+    public class ExtraFeeViewModel
     {
         public int id { get; set; }
-        public string name { get; set; }
+        public string goodsType { get; set; }
+        public int extraFee { get; set; }
     }
 }

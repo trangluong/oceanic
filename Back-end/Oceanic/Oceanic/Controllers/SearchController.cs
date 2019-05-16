@@ -18,16 +18,6 @@ namespace Oceanic.Controllers
         {
             _searchRoutesService = searchRoutesService;
         }
-        [Route("api/city")]
-        [HttpGet]
-        public IEnumerable<CityViewModel> LoadCities()
-        {
-            return _searchRoutesService.LoadCity().Select(x => new CityViewModel
-            {
-                Code = x.Code,
-                Name = x.Name
-            });
-        }
 
     }
 }

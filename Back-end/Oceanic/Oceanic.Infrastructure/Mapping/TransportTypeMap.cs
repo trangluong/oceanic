@@ -16,8 +16,6 @@ namespace Oceanic.Infrastructure.Mapping
             builder.Property(t => t.Id).HasColumnName("ID");
             builder.Property(t => t.Code).HasColumnName("CODE");
             builder.Property(t => t.Name).HasColumnName("NAME");
-            builder.Property(t => t.CreatedDate).HasColumnName("CREATEDATE").ValueGeneratedOnAdd();
-            builder.Property(t => t.CreatedBy).HasColumnName("CREATEBY");
         }
     }
 }

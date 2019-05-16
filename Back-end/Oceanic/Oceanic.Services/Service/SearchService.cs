@@ -8,17 +8,17 @@ using Oceanic.Services.Interface;
 
 namespace Oceanic.Services.Service
 {
-    public class SearchService : BaseService<City>, ISearchService
+    public class SearchService : ISearchService
     {
-        private readonly IRepositoryAsync<City> _repository;
+        private readonly IRepositoryAsync<City> _cityRepository;
 
-        public SearchService(IRepositoryAsync<City> repository) : base(repository)
+        public SearchService(IRepositoryAsync<City> cityRepository) 
         {
-            this._repository = repository;
+            this._cityRepository = cityRepository;
         }
         public IEnumerable<City> LoadCity()
         {
-            return _repository.Query().Select().ToList();
+            return _cityRepository.Query().Select().ToList();
         }
 
        

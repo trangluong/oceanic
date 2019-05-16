@@ -16,8 +16,6 @@ namespace Oceanic.Infrastructure.Mapping
             builder.Property(t => t.SizeId).HasColumnName("SIZEID");
             builder.Property(t => t.MaxWeight).HasColumnName("MAXWEIGHT");
             builder.Property(t => t.Fee).HasColumnName("PRICE");
-            builder.Property(t => t.CreatedDate).HasColumnName("CREATEDATE").ValueGeneratedOnAdd();
-            builder.Property(t => t.CreatedBy).HasColumnName("CREATEBY");
         }
     }
 }

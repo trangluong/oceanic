@@ -17,6 +17,8 @@ namespace Oceanic.Services.Interface
         void UpdateExtraFeeSettings(ExtraFee extraFee);
         void AddCity(City city);
         void UpdateCity(City city);
+        string GetTypeNameById(int typeId);
+        int GetTypeIdByName(string typeName);
 
 
     }

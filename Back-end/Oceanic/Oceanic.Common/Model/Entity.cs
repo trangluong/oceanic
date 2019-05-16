@@ -11,8 +11,6 @@ namespace Oceanic.Common.Model
     {
         [NotMapped]
         public ObjectState ObjectState { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public string CreatedBy { get; set; }
+
     }
 }

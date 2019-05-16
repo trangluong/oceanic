@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace Oceanic
 {
-    public class GoodsTypeModel
+    public class PriceViewModel
     {
         public int id { get; set; }
-        public string name { get; set; }
+        public string sizeType { get; set; }
+        public int price { get; set; }
+        public int maxWeight { get; set; }
     }
 }
