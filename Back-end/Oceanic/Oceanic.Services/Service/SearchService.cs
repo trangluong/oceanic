@@ -148,11 +148,10 @@ namespace Oceanic.Services.Service
                 switch (routeDict[key].transportType)
                 {
                     case TransportTypeEnum.AIRPLANE:
+                    case TransportTypeEnum.CAR:
                         return (double) (pricesPerSegment[TransportTypeEnum.AIRPLANE].price * routeDict[key].segment);
                     case TransportTypeEnum.SEA:
-                        return (double) (pricesPerSegment[TransportTypeEnum.SEA].price * sr.weight);
-                    case TransportTypeEnum.CAR:
-                        return (double) pricesPerSegment[TransportTypeEnum.SEA].price;
+                        return (double) (pricesPerSegment[TransportTypeEnum.SEA].price * sr.weight * routeDict[key].segment);
                     default:
                         throw new ArgumentException("transport type not supported");
                 }
@@ -164,7 +163,8 @@ namespace Oceanic.Services.Service
                 return routeDict[key].hours;
             }
 
-            IEnumerable<IEnumerable<TaggedEdge<string, TransportTypeEnum>>> ShortestPaths(Func<TaggedEdge<string, TransportTypeEnum>, double> weightFunc)
+            IEnumerable<IEnumerable<TaggedEdge<string, TransportTypeEnum>>> ShortestPaths(
+                Func<TaggedEdge<string, TransportTypeEnum>, double> weightFunc)
             {
                 try
                 {

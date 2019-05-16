@@ -9,45 +9,40 @@ namespace Oceanic.Services.Service
 {
     public class RouteService : IRouteService
     {
-        
-        public RouteService() {}
-        
         public IEnumerable<RoutesViewModel> GetRoutes(TransportTypeEnum transportType)
         {
-            HttpWebRequestHandler task = new HttpWebRequestHandler();
+            var requestHandler = new HttpWebRequestHandler();
              
-            if (transportType == TransportTypeEnum.SEA)
+            switch (transportType)
             {
-                return new List<RoutesViewModel>();
+                case TransportTypeEnum.SEA:
+                    return new List<RoutesViewModel>();
 //                return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes");
+                case TransportTypeEnum.CAR:
+                    return requestHandler.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes");
+                default:
+                    throw new ArgumentException("transport type " + transportType + " not supported");
             }
-
-            if (transportType == TransportTypeEnum.CAR)
-            {
-                return task.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes");
-            }
-            
-            throw new ArgumentException("transport type not supported");
         }
 
         public IList<CalculatePrice> CalculatePriceExternal(IList<CalculatePriceViewModel> calculatePriceViewModel, 
             TransportTypeEnum transportType)
         {
-            HttpWebRequestHandler task = new HttpWebRequestHandler();
+            var requestHandler = new HttpWebRequestHandler();
 
-            if (transportType == TransportTypeEnum.SEA)
+            switch (transportType)
             {
-                return task.PostMethod("https://wa-eitvn.azurewebsites.net/index.php?r=api/price", 
-                    calculatePriceViewModel).Result;
+                case TransportTypeEnum.SEA:
+                    return requestHandler.PostMethod(
+                        "https://wa-eitvn.azurewebsites.net/index.php?r=api/price", 
+                        calculatePriceViewModel).Result;
+                case TransportTypeEnum.CAR:
+                    return requestHandler.PostMethod(
+                        "https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", 
+                        calculatePriceViewModel).Result;
+                default:
+                    throw new ArgumentException("transport type not supported");
             }
-
-            if (transportType == TransportTypeEnum.CAR)
-            {
-                return task.PostMethod("https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", 
-                    calculatePriceViewModel).Result;
-            }
-            
-            throw new ArgumentException("transport type not supported");
         }
     }
 }

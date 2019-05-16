@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Oceanic.Common.Model;
 using Oceanic.Core;
 using Oceanic.Infrastructure.Interfaces;
@@ -116,9 +115,16 @@ namespace Oceanic.Services.Service
             return _cityRepository.Query(x => x.Id == cityId).Select(x => x.Code).FirstOrDefault();
         }
 
-        private CalculatePrice CalulatePriceForASegment(CalculatePriceViewModel model, IList<Size> sizes, IList<GoodsType> goodsTypes, IList<Price> prices)
+        private CalculatePrice CalculatePriceForASegment(CalculatePriceViewModel model, 
+            List<Size> sizes, List<GoodsType> goodsTypes, List<Price> prices)
         {
-            Size size = new Size();
+            var notAccepted = new CalculatePrice
+            {
+                price = 0,
+                status = 0
+            };
+            
+            Size size = null;
             foreach (var s in sizes)
             {
                 if (model.height <= s.MaxHeight && model.length <= s.MaxDepth && model.width <= s.MaxBreadth)
@@ -130,13 +136,10 @@ namespace Oceanic.Services.Service
 
             if (size == null)
             {
-                return new CalculatePrice()
-                {
-                    price = 0,
-                    status = 0
-                };
+                return notAccepted;
             }
-            Price price = new Price();
+            
+            Price price = null;
             foreach (var x in prices)
             {
                 if (x.SizeId == size.Id && model.weight <= x.MaxWeight)
@@ -144,29 +147,40 @@ namespace Oceanic.Services.Service
                     price = x;
                     break;
                 }
-
             }
-            int goodsTypeId = _goodsTypeRepository.Query(x => x.Code == model.goods_type).Select(x => x.Id).FirstOrDefault();
-            int extraPercent= _extraFeeRepository.Query(x => x.GoodsTypeId == goodsTypeId).Select(x => x.ExtraPercent).FirstOrDefault();
-            decimal extraFee  = (extraPercent / 100) * price.Fee;
-            return  new CalculatePrice()
+
+            if (price == null)
+            {
+                return notAccepted;
+            }
+
+            var goodsType = goodsTypes.Find(x => x.Code == model.goods_type);
+            if (goodsType == null)
+            {
+                return notAccepted;
+            }
+            
+            int extraPercent= _extraFeeRepository.Query(x => x.GoodsTypeId == goodsType.Id)
+                .Select(x => x.ExtraPercent).FirstOrDefault();
+            
+            decimal extraFee  = ((decimal) extraPercent) / 100 * price.Fee;
+            return  new CalculatePrice
             {
                 price = price.Fee + extraFee,
                 status = 1
             };
-
-
         }
+        
         public IList<CalculatePrice> CalculatePrices(IList<CalculatePriceViewModel> calculatePriceViewModel)
         {
-            IList<Size> sizes = _sizeRepository.Query().Select().ToList();
-            IList<GoodsType> goodsTypes = _goodsTypeRepository.Query().Select().ToList();
-            IList<Price> prices = _priceRepository.Query().Select().ToList();
-            IList<CalculatePrice> result = new List<CalculatePrice>();
+            var sizes = _sizeRepository.Query().Select().ToList();
+            var goodsTypes = _goodsTypeRepository.Query().Select().ToList();
+            var prices = _priceRepository.Query().Select().ToList();
+            var result = new List<CalculatePrice>();
             
             foreach (var item in calculatePriceViewModel)
             {
-                result.Add(CalulatePriceForASegment(item, sizes, goodsTypes, prices));
+                result.Add(CalculatePriceForASegment(item, sizes, goodsTypes, prices));
             }
             return result;
         }
