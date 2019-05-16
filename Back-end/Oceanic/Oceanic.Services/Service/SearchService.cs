@@ -53,23 +53,28 @@ namespace Oceanic.Services.Service
             return graph;
         }
 
-        private List<RouteSearchModel> GetAllRoutes(Dictionary<int, City> cityDict)
+        private List<RouteSearchModel> GetAllRoutes(
+            HashSet<TransportTypeEnum> transportTypes, Dictionary<int, City> cityDict)
         {
-            var airplaneRoutes = _routeRepository.Query(r => r.IsActive).Select().ToList();
             var airplaneRouteModels = new List<RouteSearchModel>();
-            foreach (var r in airplaneRoutes)
+            if (transportTypes.Contains(TransportTypeEnum.AIRPLANE))
             {
-                airplaneRouteModels.Add(new RouteSearchModel
+                var airplaneRoutes = _routeRepository.Query(r => r.IsActive).Select().ToList();
+                foreach (var r in airplaneRoutes)
                 {
-                    from_city = cityDict[r.FromCityId].Code,
-                    to_city = cityDict[r.ToCityId].Code,
-                    hours = r.LongHour,
-                    segment = r.Segments,
-                    transportType = TransportTypeEnum.AIRPLANE
-                });
+                    airplaneRouteModels.Add(new RouteSearchModel
+                    {
+                        from_city = cityDict[r.FromCityId].Code,
+                        to_city = cityDict[r.ToCityId].Code,
+                        hours = r.LongHour,
+                        segment = r.Segments,
+                        transportType = TransportTypeEnum.AIRPLANE
+                    });
+                }
             }
-
-            List<RouteSearchModel> ToModels(IEnumerable<RoutesViewModel> ms, TransportTypeEnum transportType)
+            
+            List<RouteSearchModel> ToModels(
+                IEnumerable<RoutesViewModel> ms, TransportTypeEnum transportType)
             {
                 var res = new List<RouteSearchModel>();
                 foreach (var m in ms)
@@ -85,13 +90,20 @@ namespace Oceanic.Services.Service
                 }
                 return res;
             }
-            
-            var seaRouteModels = ToModels(_routeService.GetRoutes(TransportTypeEnum.SEA), TransportTypeEnum.SEA);
-            
-            var carRouteModels = ToModels(_routeService.GetRoutes(TransportTypeEnum.CAR), TransportTypeEnum.CAR);
+
+            var seaRouteModels = new List<RouteSearchModel>();
+            if (transportTypes.Contains(TransportTypeEnum.SEA))
+            {
+                seaRouteModels = ToModels(_routeService.GetRoutes(TransportTypeEnum.SEA), TransportTypeEnum.SEA);
+            }
+
+            var carRouteModels = new List<RouteSearchModel>();
+            if (transportTypes.Contains(TransportTypeEnum.CAR))
+            {
+                carRouteModels = ToModels(_routeService.GetRoutes(TransportTypeEnum.CAR), TransportTypeEnum.CAR);
+            }
             
             var otherRoutes = seaRouteModels.Concat(carRouteModels);
-
             return airplaneRouteModels.Concat(otherRoutes).ToList();
         }
 
@@ -112,35 +124,44 @@ namespace Oceanic.Services.Service
             };
 
             var res = new Dictionary<TransportTypeEnum, CalculatePrice>();
+
+            void AddPrice(TransportTypeEnum tt, CalculatePrice p)
+            {
+                if (p.status > 0)
+                {
+                    res.Add(tt, p);
+                }
+            }
             
             var airplanePrice = _adminService.CalculatePrices(cpm).First();
-            res.Add(TransportTypeEnum.AIRPLANE, airplanePrice);
+            AddPrice(TransportTypeEnum.AIRPLANE, airplanePrice);
 
 //            var seaPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA).First();
-            res.Add(TransportTypeEnum.SEA, new CalculatePrice
+            var seaPrice = new CalculatePrice
             {
                 price = 20,
                 status = 1
-            });
-
+            };
+            AddPrice(TransportTypeEnum.SEA, seaPrice);
+            
             var carPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.CAR).First();
-            res.Add(TransportTypeEnum.CAR, carPrice);
+            AddPrice(TransportTypeEnum.CAR, carPrice);
             
             return res;
         }
 
         public List<RouteSearchViewModel> SearchRoutes(RouteSearchRequest sr)
         {
+            var basePrices = GetAllPrices(sr);
+            
             var cities = _cityRepository.Query().Select().ToList();
             var cityById = cities.ToDictionary(c => c.Id);
             
-            var routes = GetAllRoutes(cityById);
+            var routes = GetAllRoutes(basePrices.Keys.ToHashSet(), cityById);
 
             var routeDict = routes.ToDictionary(r => (r.from_city, r.to_city, r.transportType));
 
             var graph = buildGraph(routes);
-           
-            var pricesPerSegment = GetAllPrices(sr);
 
             double WeightByPrice(TaggedEdge<string, TransportTypeEnum> edge)
             {
@@ -148,10 +169,11 @@ namespace Oceanic.Services.Service
                 switch (routeDict[key].transportType)
                 {
                     case TransportTypeEnum.AIRPLANE:
+                        return (double) (basePrices[TransportTypeEnum.AIRPLANE].price);
                     case TransportTypeEnum.CAR:
-                        return (double) (pricesPerSegment[TransportTypeEnum.AIRPLANE].price * routeDict[key].segment);
+                        return (double) (basePrices[TransportTypeEnum.AIRPLANE].price * routeDict[key].segment);
                     case TransportTypeEnum.SEA:
-                        return (double) (pricesPerSegment[TransportTypeEnum.SEA].price * sr.weight * routeDict[key].segment);
+                        return (double) (basePrices[TransportTypeEnum.SEA].price * sr.weight * routeDict[key].segment);
                     default:
                         throw new ArgumentException("transport type not supported");
                 }
