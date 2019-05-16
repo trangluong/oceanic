@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Oceanic.Common.Model;
 using Oceanic.Core;
@@ -47,7 +48,7 @@ namespace Oceanic.Services.Service
 
             return graph;
         }
-
+        
         public List<RouteSearchViewModel> SearchRoutes(RouteSearchRequest sr)
         {
             var routes = _routeRepository.Query(r => r.IsActive).Select().ToList();
@@ -70,21 +71,30 @@ namespace Oceanic.Services.Service
             };
             var pricePerSegment = _adminService.CalculatePrices(cpr).First();
 
-            double EdgeWeights(Edge<int> edge)
+            double WeightByPrice(Edge<int> edge)
             {
                 return (double) (pricePerSegment.price * routeDict[(edge.Source, edge.Target)].Segments);
             }
+            
+            double WeightByTime(Edge<int> edge)
+            {
+                return routeDict[(edge.Source, edge.Target)].LongHour;
+            }
 
-            IEnumerable<IEnumerable<Edge<int>>> shortestPaths;
-            try
+            IEnumerable<IEnumerable<Edge<int>>> ShortestPaths(Func<Edge<int>, double> weightFunc)
             {
-                shortestPaths = graph.RankedShortestPathHoffmanPavley(
-                    EdgeWeights, sr.fromCityId, sr.toCityId, 2);
+                try
+                {
+                    return graph.RankedShortestPathHoffmanPavley(
+                        weightFunc, sr.fromCityId, sr.toCityId, 2);
+                }
+                catch (KeyNotFoundException e)
+                {
+                    return new List<List<Edge<int>>>();
+                }
             }
-            catch (KeyNotFoundException e)
-            {
-                return new List<RouteSearchViewModel>();
-            }
+
+            var shortestPaths = ShortestPaths(WeightByTime).Concat(ShortestPaths(WeightByPrice));
 
             var result = new List<RouteSearchViewModel>();
 
@@ -107,8 +117,8 @@ namespace Oceanic.Services.Service
                         transportType = transportTypeDict[routeDict[(edge.Source, edge.Target)].TransportType].Name
                     });
 
-                    estimatedTime += routeDict[(edge.Source, edge.Target)].LongHour;
-                    price += EdgeWeights(edge);
+                    estimatedTime += Convert.ToInt32(WeightByTime(edge));
+                    price += WeightByPrice(edge);
                 }
 
                 routeModel.parts = parts;
