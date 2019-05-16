@@ -16,10 +16,11 @@ namespace Oceanic.Services.Service
             switch (transportType)
             {
                 case TransportTypeEnum.SEA:
-                    return new List<RoutesViewModel>();
-//                return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes");
+                    return requestHandler.GetReleases(
+                        "https://wa-eitvn.azurewebsites.net/index.php?r=api/routes");
                 case TransportTypeEnum.CAR:
-                    return requestHandler.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes");
+                    return requestHandler.GetReleases(
+                        "https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes");
                 default:
                     throw new ArgumentException("transport type " + transportType + " not supported");
             }

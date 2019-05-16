@@ -136,12 +136,7 @@ namespace Oceanic.Services.Service
             var airplanePrice = _adminService.CalculatePrices(cpm).First();
             AddPrice(TransportTypeEnum.AIRPLANE, airplanePrice);
 
-//            var seaPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA).First();
-            var seaPrice = new CalculatePrice
-            {
-                price = 20,
-                status = 1
-            };
+            var seaPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA).First();
             AddPrice(TransportTypeEnum.SEA, seaPrice);
             
             var carPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.CAR).First();
