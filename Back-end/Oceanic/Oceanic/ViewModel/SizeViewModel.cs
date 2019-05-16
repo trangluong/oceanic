@@ -11,6 +11,6 @@ namespace Oceanic
         public string type { get; set; }
         public int maxHeight { get; set; }
         public int maxDepth { get; set; }
-        public int maxBreath { get; set; }
+        public int maxBreadth { get; set; }
     }
 }

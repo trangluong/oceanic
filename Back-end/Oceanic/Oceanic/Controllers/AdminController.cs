@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Oceanic.Common.Model;
 using Oceanic.Core;
 using Oceanic.Services.Interface;
+
 
 namespace Oceanic.Controllers
 {
@@ -52,7 +54,7 @@ namespace Oceanic.Controllers
                 id = x.Id,
                 type = x.Type,
                 maxHeight = x.MaxHeight,
-                maxBreath = x.MaxBreath,
+                maxBreadth = x.MaxBreath,
                 maxDepth = x.MaxBreath
             });
         }
@@ -66,7 +68,7 @@ namespace Oceanic.Controllers
                 Id = sizeViewModel.id,
                 Type = sizeViewModel.type,
                 MaxHeight = sizeViewModel.maxHeight,
-                MaxBreath = sizeViewModel.maxBreath,
+                MaxBreath = sizeViewModel.maxBreadth,
                 MaxDepth = sizeViewModel.maxDepth
             };
             _adminService.UpdateSizeSettings(size);    
@@ -131,6 +133,46 @@ namespace Oceanic.Controllers
             };
 
             _adminService.UpdateExtraFeeSettings(extraFee);
+
+        }
+
+        [Route("api/exportedRoutes")]
+        [HttpPut]
+        public IEnumerable<RoutesViewModel> ExportRoutes()
+        {
+            return _adminService.LoadRoutes().Select(x => new RoutesViewModel
+            {
+                from_city = _adminService.GetCityNameById(x.FromCityId),
+                to_city = _adminService.GetCityNameById(x.ToCityId),
+                hours = x.LongHour,
+                segment = x.Segments
+
+            });
+
+        }
+
+
+        [Route("api/calculatePrices")]
+        [HttpPost]
+        public IList<CalculatePrice> CalculatePrice([FromBody] IList<CalculatePriceViewModel> calculatePriceViewModel)
+        {
+            IList<CalculatePrice> result = new List<CalculatePrice>();
+            foreach (var item in calculatePriceViewModel)
+            {
+                int goodsType = _adminService.LoadGoodsTypes().Select(x => x.Code == item.goods_type).Count();
+                if (goodsType == 0 || item.height > 200 || item.width > 200 || item.length > 200)
+                {
+                    CalculatePrice response = new CalculatePrice()
+                    {
+                        price = 0,
+                        status = 0
+                    };
+                    result.Add(response);
+                }
+            }
+            return result;
+            
+            
 
         }
 

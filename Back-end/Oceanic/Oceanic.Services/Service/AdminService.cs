@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Oceanic.Common.Model;
 using Oceanic.Core;
 using Oceanic.Infrastructure.Interfaces;
 using Oceanic.Services.Interface;
@@ -10,19 +11,23 @@ namespace Oceanic.Services.Service
 {
     public class AdminService : IAdminService
     {
+        private readonly IRepositoryAsync<Route> _routeRepository;
         private readonly IRepositoryAsync<City> _cityRepository;
         private readonly IRepositoryAsync<Size> _sizeRepository;
         private readonly IRepositoryAsync<ExtraFee> _extraFeeRepository;
         private readonly IRepositoryAsync<GoodsType> _goodsTypeRepository;
         private readonly IRepositoryAsync<Price> _priceRepository;
+
         public AdminService(IRepositoryAsync<City> cityRepository, IRepositoryAsync<Size> sizeRepository,
-           IRepositoryAsync<ExtraFee> extraFeeRepository, IRepositoryAsync<GoodsType> goodsTypeRepository, IRepositoryAsync<Price> priceRepository) 
+           IRepositoryAsync<ExtraFee> extraFeeRepository, IRepositoryAsync<GoodsType> goodsTypeRepository, IRepositoryAsync<Price> priceRepository,
+            IRepositoryAsync<Route> routeRepository) 
         {
             this._cityRepository = cityRepository;
             this._sizeRepository = sizeRepository;
             this._goodsTypeRepository = goodsTypeRepository;
             this._priceRepository = priceRepository;
             this._extraFeeRepository = extraFeeRepository;
+            this._routeRepository = routeRepository;
         }
         public void AddCity(City city)
         {
@@ -94,5 +99,69 @@ namespace Oceanic.Services.Service
         {
             return _goodsTypeRepository.Query(x => x.Name == typeName).Select(x => x.Id).FirstOrDefault();
         }
+
+        public IEnumerable<Route> LoadRoutes()
+        {
+            return _routeRepository.Query().Select();
+        }
+
+        public string GetCityNameById(int cityId)
+        {
+            return _cityRepository.Query(x => x.Id == cityId).Select(x => x.Name).FirstOrDefault();
+        }
+
+        private CalculatePrice CalulatePriceForASegment(CalculatePriceViewModel model, IList<Size> sizes, IList<GoodsType> goodsTypes, IList<Price> prices)
+        {
+            Size size = new Size();
+            foreach (var s in sizes)
+            {
+                if (model.height <= s.MaxHeight && model.length <= s.MaxDepth && model.width <= s.MaxBreath)
+                {
+                    size = s;
+                    break;
+                }
+            }
+
+            if (size == null)
+            {
+                return new CalculatePrice()
+                {
+                    price = 0,
+                    status = 0
+                };
+            }
+            Price price = new Price();
+            foreach (var x in prices)
+            {
+                if (x.SizeId == size.Id && model.weight <= x.MaxWeight)
+                {
+                    price = x;
+                    break;
+                }
+
+            }
+            return  new CalculatePrice()
+            {
+                price = price.Fee,
+                status = 1
+            };
+
+
+        }
+        public IList<CalculatePrice> CalculatePrices(IList<CalculatePriceViewModel> calculatePriceViewModel)
+        {
+            IList<Size> sizes = _sizeRepository.Query().Select().ToList();
+            IList<GoodsType> goodsTypes = _goodsTypeRepository.Query().Select().ToList();
+            IList<Price> prices = _priceRepository.Query().Select().ToList();
+            IList<CalculatePrice> result = new List<CalculatePrice>();
+            
+            foreach (var item in calculatePriceViewModel)
+            {
+                result.Add(CalulatePriceForASegment(item, sizes, goodsTypes, prices));
+            }
+            return result;
+        }
+
+
     }
 }

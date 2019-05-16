@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Oceanic.Common.Model;
 
 namespace Oceanic.Services.Interface
 {
     public interface IAdminService
     {
+        IEnumerable<Route> LoadRoutes();
         IEnumerable<City> LoadCity(bool IsActive);
         IEnumerable<GoodsType> LoadGoodsTypes();
         IEnumerable<Size> LoadSizeSettings();
@@ -21,6 +23,9 @@ namespace Oceanic.Services.Interface
         int GetTypeIdByName(string typeName);
         string GetGoodsTYpeNameById(int typeId);
         int GetIdIdByGoodsTypeName(string typeName);
+        string GetCityNameById(int cityId);
+        IList<CalculatePrice> CalculatePrices(IList<CalculatePriceViewModel> calculatePriceViewModel);
+       
 
     }
 }
