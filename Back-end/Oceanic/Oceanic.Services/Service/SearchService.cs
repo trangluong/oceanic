@@ -127,19 +127,24 @@ namespace Oceanic.Services.Service
 
             void AddPrice(TransportTypeEnum tt, CalculatePrice p)
             {
-                if (p.status > 0)
+                if (p != null && p.status > 0)
                 {
                     res.Add(tt, p);
                 }
             }
+
+            CalculatePrice FirstOrNull(IList<CalculatePrice> ps)
+            {
+                return ps.Count == 0 ? null : ps.First();
+            }
             
-            var airplanePrice = _adminService.CalculatePrices(cpm).First();
+            var airplanePrice = FirstOrNull(_adminService.CalculatePrices(cpm));
             AddPrice(TransportTypeEnum.AIRPLANE, airplanePrice);
 
-            var seaPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA).First();
+            var seaPrice = FirstOrNull(_routeService.CalculatePriceExternal(cpm, TransportTypeEnum.SEA));
             AddPrice(TransportTypeEnum.SEA, seaPrice);
             
-            var carPrice = _routeService.CalculatePriceExternal(cpm, TransportTypeEnum.CAR).First();
+            var carPrice = FirstOrNull(_routeService.CalculatePriceExternal(cpm, TransportTypeEnum.CAR));
             AddPrice(TransportTypeEnum.CAR, carPrice);
             
             return res;

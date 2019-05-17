@@ -185,12 +185,12 @@ namespace Oceanic.Controllers
              
             if(transportType == "sea")
             {
-               return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes");
+               return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes").Result;
             }
 
             if (transportType == "car")
             {
-                return task.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes");
+                return task.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes").Result;
             }
             return null;
         }
