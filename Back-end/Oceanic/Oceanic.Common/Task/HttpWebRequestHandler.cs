@@ -78,9 +78,15 @@ namespace Oceanic.Common
                 request.AddParameter("undefined", json, RestSharp.ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
 
-                return JsonConvert.DeserializeObject<List<CalculatePrice>>(response.Content);
+                try
+                {
+                    return JsonConvert.DeserializeObject<List<CalculatePrice>>(response.Content);
+                }
+                catch (JsonSerializationException e)
+                {
+                    return new List<CalculatePrice>();
+                }
             }
-            
         }
 
     }
