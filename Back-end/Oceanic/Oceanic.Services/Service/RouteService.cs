@@ -18,9 +18,8 @@ namespace Oceanic.Services.Service
                 switch (transportType)
                 {
                     case TransportTypeEnum.SEA:
-                        return new List<RoutesViewModel>();
-//                        return requestHandler.GetReleases(
-//                            "https://wa-eitvn.azurewebsites.net/index.php?r=api/routes").Result;
+                        return requestHandler.GetReleases(
+                            "https://wa-eitvn.azurewebsites.net/index.php?r=api/routes").Result;
                     case TransportTypeEnum.CAR:
                         return requestHandler.GetReleases(
                             "https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes").Result;
@@ -44,10 +43,9 @@ namespace Oceanic.Services.Service
                 switch (transportType)
                 {
                     case TransportTypeEnum.SEA:
-                        return new List<CalculatePrice>();
-//                        return requestHandler.PostMethod(
-//                            "https://wa-eitvn.azurewebsites.net/index.php?r=api/price",
-//                            calculatePriceViewModel).Result;
+                        return requestHandler.PostMethod(
+                            "https://wa-eitvn.azurewebsites.net/index.php?r=api/price",
+                            calculatePriceViewModel).Result;
                     case TransportTypeEnum.CAR:
                         return requestHandler.PostMethod(
                             "https://wa-tlvn.azurewebsites.net/api/public/caculatePrices",
