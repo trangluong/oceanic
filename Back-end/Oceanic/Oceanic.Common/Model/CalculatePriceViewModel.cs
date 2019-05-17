@@ -11,5 +11,6 @@ namespace Oceanic.Common.Model
         public int height { get; set; }
         public int length { get; set; }
         public string goods_type { get; set; }
+        public String departure_date { get; set; }
     }
 }
