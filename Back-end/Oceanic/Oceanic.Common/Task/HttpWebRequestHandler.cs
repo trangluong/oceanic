@@ -15,15 +15,39 @@ namespace Oceanic.Common
 
         public static readonly int HttpTimeoutSecs = 10;
         
-        public async Task<IEnumerable<RoutesViewModel>> GetReleases(string url)
+        public async Task<IEnumerable<RoutesViewModel>> GetReleases(string url, TransportTypeEnum transportType)
         {
-            using (var httpClient = new HttpClient())
+            if (transportType == TransportTypeEnum.CAR)
             {
-                httpClient.Timeout = TimeSpan.FromSeconds(HttpTimeoutSecs);
-                
-                var response = await httpClient.GetAsync(new Uri(url));
-                response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsAsync<List<RoutesViewModel>>();
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.Timeout = TimeSpan.FromSeconds(HttpTimeoutSecs);
+
+                    var response = await httpClient.GetAsync(new Uri(url));
+                    response.EnsureSuccessStatusCode();
+                    return  await response.Content.ReadAsAsync<List<RoutesViewModel>>();
+                }
+            }
+            else
+            {
+                var client = new RestClient(url);
+                var request = new RestRequest(Method.GET);
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("Connection", "keep-alive");
+                request.AddHeader("accept-encoding", "gzip, deflate");
+                request.AddHeader("Host", "wa-eitvn.azurewebsites.net");
+                request.AddHeader("Cache-Control", "no-cache");
+                request.AddHeader("Accept", "*/*");
+               
+                IRestResponse response = client.Execute(request);
+                try
+                {
+                    return JsonConvert.DeserializeObject<List<RoutesViewModel>>(response.Content);
+                }
+                catch (JsonSerializationException e)
+                {
+                    return new List<RoutesViewModel>();
+                }
             }
         }
 
@@ -75,7 +99,7 @@ namespace Oceanic.Common
                 }
 
                 var json = JsonConvert.SerializeObject(body);
-                request.AddParameter("undefined", json, RestSharp.ParameterType.RequestBody);
+                request.AddParameter("undefined", json, ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
 
                 try

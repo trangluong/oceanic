@@ -181,17 +181,17 @@ namespace Oceanic.Controllers
 
         public IEnumerable<RoutesViewModel> ExportRoutes(string transportType)
         {
-            HttpWebRequestHandler task = new HttpWebRequestHandler();
-             
-            if(transportType == "sea")
-            {
-               return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes").Result;
-            }
-
-            if (transportType == "car")
-            {
-                return task.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes").Result;
-            }
+//            HttpWebRequestHandler task = new HttpWebRequestHandler();
+//             
+//            if(transportType == "sea")
+//            {
+//               return task.GetReleases("https://wa-eitvn.azurewebsites.net/index.php?r=api/routes").Result;
+//            }
+//
+//            if (transportType == "car")
+//            {
+//                return task.GetReleases("https://wa-tlvn.azurewebsites.net/api/public/configuredRoutes").Result;
+//            }
             return null;
         }
 
