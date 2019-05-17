@@ -45,11 +45,11 @@ namespace Oceanic.Services.Service
                     case TransportTypeEnum.SEA:
                         return requestHandler.PostMethod(
                             "https://wa-eitvn.azurewebsites.net/index.php?r=api/price",
-                            calculatePriceViewModel).Result;
+                            calculatePriceViewModel, transportType).Result;
                     case TransportTypeEnum.CAR:
                         return requestHandler.PostMethod(
                             "https://wa-tlvn.azurewebsites.net/api/public/caculatePrices",
-                            calculatePriceViewModel).Result;
+                            calculatePriceViewModel, transportType).Result;
                     default:
                         throw new ArgumentException("transport type not supported");
                 }

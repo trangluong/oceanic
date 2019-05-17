@@ -201,20 +201,20 @@ namespace Oceanic.Controllers
         public IList<CalculatePrice> CalculatePriceExternal([FromBody] IList<CalculatePriceViewModel> calculatePriceViewModel, string transportType)
         {
 
-            HttpWebRequestHandler task = new HttpWebRequestHandler();
-
-            if (transportType == "sea")
-            {
-                return task.PostMethod("https://wa-eitvn.azurewebsites.net/index.php?r=api/price", 
-                    calculatePriceViewModel).Result;
-            }
-
-            if (transportType == "car")
-            {
-                return task.PostMethod("https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", 
-                    calculatePriceViewModel).Result;
-
-            }
+//            HttpWebRequestHandler task = new HttpWebRequestHandler();
+//
+//            if (transportType == "sea")
+//            {
+//                return task.PostMethod("https://wa-eitvn.azurewebsites.net/index.php?r=api/price", 
+//                    calculatePriceViewModel).Result;
+//            }
+//
+//            if (transportType == "car")
+//            {
+//                return task.PostMethod("https://wa-tlvn.azurewebsites.net/api/public/caculatePrices", 
+//                    calculatePriceViewModel).Result;
+//
+//            }
             return null;
 
            
